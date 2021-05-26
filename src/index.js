@@ -35,14 +35,25 @@ const renderBreed = function(data){
 }
 getBreedUrls(breedUrl)
 
-let dogBreed = document.querySelectorAll('option')
-dogBreed.addEventListener('click', (e) => {
-    //let startLetter= e.target.value;
-    //document.querySelector('#dog-breeds').remove(li)
-    console.log('test')
+document.querySelector('select').addEventListener('click', (e)=>{
+    let startLetter = e.target.value
+    let liArray = document.querySelectorAll('li')
+    liArray.forEach(filterDogs =>{
+        if (filterDogs.innerText[0] !== startLetter){
+            filterDogs.remove()
+        }
+    })
+})
 
 })
-})
+/*
+dogBreed.addEventListener('click', console.log('test')
+    //let startLetter= e.target.value;
+    //document.querySelector('#dog-breeds').remove(li)
+    )
+
+
+
 
 let dogList = document.querySelector('dog-breeds')
 dogList.filter(()=> {
@@ -52,3 +63,4 @@ dogList.filter(()=> {
 
     
 })
+*/
