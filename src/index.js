@@ -1,7 +1,7 @@
 console.log('%c HI', 'color: firebrick')
 const imgUrl = "https://dog.ceo/api/breeds/image/random/4"
 const breedUrl = 'https://dog.ceo/api/breeds/list/all' 
-document.addEventListener('DOMContentLoaded', () => {
+let breedArray = []
 
 function getImgUrls(imgUrl){
     fetch(imgUrl)
@@ -19,48 +19,40 @@ getImgUrls(imgUrl)
 function getBreedUrls(breedUrl){
     fetch(breedUrl)
     .then(res => res.json())
-    .then(data => Object.keys(data.message).forEach(renderBreed))
+    .then(data => renderBreed(data))
 }
 
 const renderBreed = function(data){
-    let li = document.createElement('li')
-    li.textContent = data
-    document.querySelector('#dog-breeds').append(li)
-
-    li.addEventListener('click', () => {
-        li.style.color= "red"
+    breedArray = Object.keys(data.message)
+    breedArray.forEach(breed =>{
+    createLi(breed)
+    if (data.message[breed].length > 0){
+        data.message[breed].forEach(subBreed =>{
+            createLi(subBreed)
+        })        
+    }
     })
+}
+
+getBreedUrls(breedUrl)
+
+let breedDropDown = document.querySelector('select')
+
+breedDropDown.addEventListener('change', (e)=>{
+    let startLetter = e.target.value
+    
+    let filteredBreeds = breedArray.filter(breed => breed[0] === startLetter)
+    document.querySelector('#dog-breeds').innerHTML = ''
+    filteredBreeds.forEach(breed => createLi(breed))
+
+})
+
+function createLi(breed){
+    let li = document.createElement("li")
+    li.textContent = breed
+    li.addEventListener('click', () => {
+        li.style.color= "red"})
+    document.querySelector('#dog-breeds').append(li)
 
 
 }
-getBreedUrls(breedUrl)
-
-document.querySelector('select').addEventListener('click', (e)=>{
-    let startLetter = e.target.value
-    let liArray = document.querySelectorAll('li')
-    liArray.forEach(filterDogs =>{
-        if (filterDogs.innerText[0] !== startLetter){
-            filterDogs.remove()
-        }
-    })
-})
-
-})
-/*
-dogBreed.addEventListener('click', console.log('test')
-    //let startLetter= e.target.value;
-    //document.querySelector('#dog-breeds').remove(li)
-    )
-
-
-
-
-let dogList = document.querySelector('dog-breeds')
-dogList.filter(()=> {
-    let dropDown= document.getElementById('breed-dropdown');
-
-    dropDown.appendChild(dropDownlist)
-
-    
-})
-*/
